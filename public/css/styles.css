@@ -7,6 +7,10 @@
   font-size: .95rem;
 }
 
+#messages {
+  list-style: none;
+}
+
 ul, li {
   list-style-position: inside;
 }

@@ -18,11 +18,32 @@ function scrollToBottom() {
 }
 
 socket.on('connect', function () {
-  console.log('Connected to server');
+  //console.log('Connected to server');
+  var params = $.deparam(window.location.search);
+
+  socket.emit('join', params, function (err) {
+    if (err) {
+      alert(err);
+      window.location.href = '/';
+    } else {
+      console.log('No error');
+    }
+  });
 });
 
 socket.on('disconnect', function () {
   console.log('Disconnected from server');
+});
+
+socket.on('updateUserList', function (users) {
+  //console.log('Users list', users);
+  var ol = $('<ol></ol>');
+
+  users.forEach(function (user) {
+    ol.append($('<li></li>').text(user));
+  });
+
+  $('#users').html(ol);
 });
 
 socket.on('newMessage', function (res) {
@@ -51,12 +72,15 @@ socket.on('newLocationMessage', function (res) {
   scrollToBottom();
 });
 
+/*
 socket.emit('createMessage', {
   from: 'Ervin',
   text: 'Hello there!'
 }, function (data) {
   console.log('Got it', data);
 });
+
+*/
 
 $('#message-form').on('submit', function (e) {
   e.preventDefault();
